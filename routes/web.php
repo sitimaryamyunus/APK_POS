@@ -36,3 +36,4 @@ Route::middleware('auth')->group(function () {
         Route::resource('/itempenjualan', ItemPenjualanController::class);
     });
 });
+// Cek nama commit baru
