@@ -42,7 +42,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-        public function store(StoreRequest $request)
+    public function store(StoreRequest $request)
     {
         $dataReq = $request->validated();
 
@@ -51,10 +51,10 @@ class UserController extends Controller
         $data['password'] = Hash::make($dataReq['password']);
         $data['role_id']  = $dataReq['role_id'];
 
-User::create($data);
+        User::create($data);
 
-return redirect()->route('admin.users')->with('success', 'User berhasil dibuat');
-
+        // PERBAIKAN: Mengalihkan ke rute index yang benar setelah tambah data
+        return redirect()->route('admin.users.index')->with('success', 'User berhasil dibuat');
     }
 
     /**
@@ -91,7 +91,8 @@ return redirect()->route('admin.users')->with('success', 'User berhasil dibuat')
 
         $user->save();
 
-        return redirect()->route('admin.users.edit', $user->id)->with('success', 'User updated');
+        // PERBAIKAN: Mengubah dari admin.users.edit menjadi admin.users.index agar otomatis kembali ke tabel utama
+        return redirect()->route('admin.users.index')->with('success', 'User updated');
     }
 
     /**

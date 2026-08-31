@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'ini Halaman Ujicoba')
+@section('title', 'Masuk POS CAFE')
 
 @section('content')
 <style>
@@ -66,8 +66,8 @@
     .icon-badge {
         background: linear-gradient(135deg, #fdf2f8, #fce7f3);
         border: 1px solid #fbcfe8;
-        width: 65px;
-        height: 65px;
+        width: 75px; /* Sedikit diperlebar agar ikon bangunan cafe presisi */
+        height: 75px;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -76,9 +76,8 @@
     }
 
     .card-header svg {
-        width: 32px;
-        height: 32px;
-        fill: #ec4899;
+        width: 44px;
+        height: 44px;
     }
 
     .login-card .card-body {
@@ -220,12 +219,23 @@
 <div class="login-wrapper">
     <div class="card login-card text-center">
         <div class="card-header">
+            <!-- Pemasangan Vektor Ikon Cafe Baru -->
             <div class="icon-badge">
-                <svg xmlns="http://w3.org" viewBox="0 0 16 16">
-                    <path d="M8 1a3.5 3.5 0 0 0-3.5 3.5V7H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1h-.5V4.5A3.5 3.5 0 0 0 8 1zm2.5 6h-5V4.5a2.5 2.5 0 0 1 5 0V7z"/>
+                <svg viewBox="0 0 512 512" xmlns="http://w3.org">
+                    <path d="M434.9,493.5H77.1a18.6,18.6,0,0,1-18.6-18.6V180.3a18.6,18.6,0,0,1,18.6-18.6H434.9a18.6,18.6,0,0,1,18.6,18.6V474.9A18.6,18.6,0,0,1,434.9,493.5Z" fill="#fbcfe8"/>
+                    <path d="M453.5,180.3V474.9a18.6,18.6,0,0,1-18.6,18.6H77.1a18.6,18.6,0,0,1-18.6-18.6V180.3m395-18.6H77.1a18.6,18.6,0,0,0-18.6,18.6V474.9a18.6,18.6,0,0,0,18.6,18.6H434.9a18.6,18.6,0,0,0,18.6-18.6V180.3A18.6,18.6,0,0,0,453.5,161.7Z" fill="#4c0519"/>
+                    <path d="M482.4,161.7H29.6a18.6,18.6,0,0,1-18.6-18.6V105.9A18.6,18.6,0,0,1,29.6,87.3H482.4a18.6,18.6,0,0,1,18.6,18.6v37.2A18.6,18.6,0,0,1,482.4,161.7Z" fill="#ec4899"/>
+                    <path d="M501,105.9v37.2a18.6,18.6,0,0,1-18.6,18.6H29.6a18.6,18.6,0,0,1-18.6-18.6V105.9A18.6,18.6,0,0,1,29.6,87.3H482.4A18.6,18.6,0,0,1,501,105.9Zm-18.6-37.2H29.6A37.2,37.2,0,0,0,-7.6,105.9v37.2a37.2,37.2,0,0,0,37.2,37.2H482.4a37.2,37.2,0,0,0,37.2-37.2V105.9A37.2,37.2,0,0,0,482.4,68.7Z" fill="#4c0519"/>
+                    <rect x="91" y="112" width="330" height="25" fill="#ffffff" rx="5"/>
+                    <path d="M141.6,493.5H91.5V263.1a25,25,0,0,1,25-25h0a25,25,0,0,1,25,25Z" fill="#be185d"/>
+                    <path d="M141.6,493.5V263.1a25,25,0,0,0-25-25h0a25,25,0,0,0-25,25V493.5h50m18.6,18.6H72.9V263.1a43.6,43.6,0,0,1,43.6-43.6h0a43.6,43.6,0,0,1,43.6,43.6V512.1Z" fill="#4c0519"/>
+                    <path d="M401.9,354.2H223.7a12.4,12.4,0,0,1-12.4-12.4V250.7a12.4,12.4,0,0,1,12.4-12.4H401.9a12.4,12.4,0,0,1,12.4,12.4V341.8A12.4,12.4,0,0,1,401.9,354.2Z" fill="#ffffff"/>
+                    <path d="M401.9,238.3A12.4,12.4,0,0,1,414.3,250.7V341.8a12.4,12.4,0,0,1-12.4,12.4H223.7a12.4,12.4,0,0,1-12.4-12.4V250.7a12.4,12.4,0,0,1,12.4-12.4H401.9Zm0-18.6H223.7A31,31,0,0,0,192.7,250.7V341.8a31,31,0,0,0,31,31H401.9a31,31,0,0,0,31-31V250.7A31,31,0,0,0,401.9,219.7Z" fill="#4c0519"/>
+                    <path d="M220,230c15,0,20,15,35,15s20-15,35-15,20,15,35,15,20-15,35-15" fill="none" stroke="#4c0519" stroke-width="12" stroke-linecap="round"/>
                 </svg>
             </div>
-            <h5>Masuk POS</h5>
+            <!-- Perubahan Nama Judul -->
+            <h5>Masuk POS CAFE</h5>
         </div>
         <div class="card-body">
             <form action="{{ route('auth') }}" method="POST">
@@ -237,7 +247,7 @@
                         <svg class="input-icon-left" xmlns="http://w3.org" viewBox="0 0 16 16">
                             <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
                         </svg>
-                        <input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="nama@email.com" autocomplete="off">
+                        <input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="" autocomplete="off">
                     </div>
                     @error('email')
                         <div class="custom-error-badge">{{ $message }}</div>
@@ -250,17 +260,14 @@
                         <svg class="input-icon-left" xmlns="http://w3.org" viewBox="0 0 16 16">
                             <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1.5 1.5H6.663a3.5 3.5 0 0 1-3.163 2zM2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
                         </svg>
-                        <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="••••••••">
+                        <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="">
                         <button type="button" class="toggle-password" id="togglePassword" aria-label="Tampilkan kata sandi">
                             <svg id="eyeIcon" xmlns="http://w3.org" viewBox="0 0 16 16" fill="currentColor">
                                 <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
-                                <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                                <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0v0z"/>
                             </svg>
                         </button>
                     </div>
-                    @error('password')
-                        <div class="custom-error-badge">{{ $message }}</div>
-                    @enderror
                 </div>
 
                 <button type="submit" class="btn btn-login">Masuk POS</button>
@@ -271,12 +278,28 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const toggleBtn = document.getElementById('togglePassword');
-        const passwordInput = document.getElementById('exampleInputPassword1');
+        const toggleButton = document.getElementById('togglePassword');
+        const passwordField = document.getElementById('exampleInputPassword1');
         const eyeIcon = document.getElementById('eyeIcon');
 
-        const eyeOpen = `<path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
-                          <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>`;
-
-        const eyeClosed = `<path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 2.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z"/>
-                            <path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z"/>
+        if (toggleButton && passwordField) {
+            toggleButton.onclick = function (e) {
+                e.preventDefault(); 
+                if (passwordField.type === 'password') {
+                    passwordField.type = 'text';
+                    if (eyeIcon) {
+                        eyeIcon.setAttribute('fill', '#db2777'); 
+                        eyeIcon.innerHTML = '<path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a11.95 11.95 0 0 0-2.778.344l1.157 1.157A11.77 11.77 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755q-.247.248-.516.467zM11.242 9.123 9.123 7.004a2.5 2.5 0 0 0-3.12 3.12l2.12-2.122a.5.5 0 0 1 .707 0l1.414 1.414a.5.5 0 0 1 0 .707l-2.12 2.122a2.5 2.5 0 0 0 3.12-3.12M1 8s3-5.5 8-5.5a11.95 11.95 0 0 1 2.778.344l-1.157 1.157A11.77 11.77 0 0 0 8 4.5c-2.12 0-3.879 1.168-5.168 2.457A13.134 13.134 0 0 0 1.172 8c.058.087.122.183.195.288.335.48.83 1.12 1.465 1.755q.247.248.516.467l-1.158 1.158L1 8z"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708z"/>';
+                    }
+                } else {
+                    passwordField.type = 'password';
+                    if (eyeIcon) {
+                        eyeIcon.setAttribute('fill', 'currentColor');
+                        eyeIcon.innerHTML = '<path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/><path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0v0z"/>';
+                    }
+                }
+            };
+        }
+    });
+</script>
+@endsection

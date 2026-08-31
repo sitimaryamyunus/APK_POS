@@ -62,4 +62,5 @@
 
 <!-- Tombol Aksi -->
 <button type="submit" class="btn btn-success">Simpan</button>
-<a href="{{ route('admin.users') }}" class="btn btn-secondary">Kembali</a>
+<!-- PERBAIKAN: Mengubah admin.users menjadi admin.users.index -->
+<a href="{{ route('admin.users.index') }}" class="btn btn-secondary">Kembali</a>
