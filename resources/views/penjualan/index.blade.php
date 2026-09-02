@@ -330,8 +330,7 @@
                     </tr>
                 </thead>
                 <tbody>
-
-                                        @forelse($sales as $sale)
+                    @forelse($sales as $sale)
                     <tr>
                         <th scope="row">{{ $sales->firstItem() + $loop->index }}</th>
                         <td style="font-weight: 600;">{{ $sale->created_at->translatedFormat('d-m-Y H:i:s') }}</td>
@@ -349,7 +348,6 @@
                         </td>
                         <td>
                             <div class="d-flex align-items-center justify-content-center gap-2">
-                                <!-- Tombol pemicu popup detail modal bootstrap asli -->
                                 <button type="button" class="btn btn-detail btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal{{ $sale->id }}">
                                     Detail
                                 </button>
@@ -381,10 +379,9 @@
             </table>
         </div>
 
-    </div>
-
-    <div class="d-flex justify-content-end mt-4 pagination-wrapper">
-        {{ $sales->links() }}
+        <div class="d-flex justify-content-end mt-4 pagination-wrapper">
+            {{ $sales->links() }}
+        </div>
     </div>
 </div>
 
@@ -416,7 +413,8 @@
                     <table class="table table-sm m-0 align-middle text-center">
                         <thead class="table-light">
                             <tr>
-                                <th style="padding: 0.5rem; color: #9d174d;">No</th>
+                                <th style="padding: 0.5rem; color: #9d174d; width: 50px;">No</th>
+                                <th style="color: #9d174d; width: 70px;">Foto</th>
                                 <th class="text-start" style="color: #9d174d;">Nama Produk</th>
                                 <th style="color: #9d174d;">Harga Satuan</th>
                                 <th style="color: #9d174d;">Qty</th>
@@ -427,6 +425,13 @@
                             @forelse($sale->itemPenjualan as $idx => $item)
                             <tr>
                                 <td>{{ $idx + 1 }}</td>
+                                <td>
+                                    <img
+                                        src="{{ asset('storage/' . ($item->produk?->foto)) }}"
+                                        style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px; border: 1px solid #fbcfe8;"
+                                        onerror="this.src='https://placeholder.com'"
+                                    >
+                                </td>
                                 <td class="text-start fw-semibold">{{ $item->produk->nama ?? $item->produk->name ?? 'Produk Dihapus' }}</td>
                                 <td>Rp {{ number_format($item->harga_satuan, 0, ',', '.') }}</td>
                                 <td class="fw-bold">{{ $item->kuantitas }}</td>
@@ -434,11 +439,11 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="5" class="text-center text-muted py-3">Tidak ada rincian item barang.</td>
+                                <td colspan="6" class="text-center text-muted py-3">Tidak ada rincian item barang.</td>
                             </tr>
                             @endforelse
                             <tr class="table-light fw-bold" style="border-top: 2px solid #fbcfe8;">
-                                <td colspan="4" class="text-end py-2" style="color: #4c0519;">TOTAL AKHIR :</td>
+                                <td colspan="5" class="text-end py-2" style="color: #4c0519;">TOTAL AKHIR :</td>
                                 <td class="text-end py-2" style="font-size: 1.05rem; padding-right: 1rem; color: #be185d;">Rp {{ number_format($sale->total_pembayaran, 0, ',', '.') }}</td>
                             </tr>
                         </tbody>
@@ -449,4 +454,5 @@
     </div>
 </div>
 @endforeach
+
 @endsection

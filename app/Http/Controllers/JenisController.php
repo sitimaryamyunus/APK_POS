@@ -2,27 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
+use App\Models\Jenis; // ✅ Sudah diganti menggunakan Jenis
 use Illuminate\Http\Request;
 
 class JenisController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Menampilkan daftar jenis produk
     public function index(Request $request)
     {
-        // Mengambil data dari tabel roles sebagai perumpamaan Jenis/Kategori produk Anda
         $keyword = $request->input('search');
-
-        if ($keyword) {
-            $categories = Role::where('name', 'like', '%' . $keyword . '%')
-                ->paginate(10)
-                ->withQueryString();
-        } else {
-            $categories = Role::query()->paginate(10)->withQueryString();
-        }
+        
+        $categories = Jenis::query()
+            ->when($keyword, function ($query) use ($keyword) {
+                $query->where('nama_jenis', 'like', '%' . $keyword . '%');
+            })
+            ->orderBy('nama_jenis')
+            ->paginate(10)
+            ->withQueryString();
 
         return view('jenis.index', compact('categories'));
+    }
+
+    // Menyimpan jenis produk baru ke database
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nama_jenis' => 'required|string|max:255|unique:jenis,nama_jenis'
+        ]);
+
+        Jenis::create([
+            'nama_jenis' => $request->nama_jenis
+        ]);
+
+        return redirect()
+            ->route('admin.jenis.index')
+            ->with('success', 'Jenis produk baru berhasil ditambahkan!');
     }
 }

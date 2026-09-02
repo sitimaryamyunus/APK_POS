@@ -22,7 +22,6 @@
         border-radius: 1.75rem;
         padding: 1.75rem;
         backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
         box-shadow: 0 10px 30px rgba(219, 39, 119, 0.03);
     }
 
@@ -30,6 +29,8 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
         margin-bottom: 1.5rem;
     }
 
@@ -37,7 +38,6 @@
         font-size: 1.3rem;
         font-weight: 800;
         color: #9d174d;
-        letter-spacing: -0.4px;
         margin: 0;
         display: flex;
         align-items: center;
@@ -59,30 +59,32 @@
         padding: 0.6rem 1.1rem;
         background: rgba(255, 255, 255, 0.85);
         color: #4c0519;
-        font-weight: 500;
-        transition: all 0.25s ease;
-    }
-
-    .search-box-custom:focus {
-        border-color: #ec4899 !important;
-        box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.15) !important;
-        background: #fff;
     }
 
     .btn-cari-custom {
         background-color: rgba(255, 255, 255, 0.75);
         border: 1px solid #fbcfe8;
-        border-left: none;
         color: #be185d;
         font-weight: 600;
-        padding: 0 1.25rem;
         border-radius: 0 1rem 1rem 0 !important;
-        transition: all 0.2s;
     }
 
-    .btn-cari-custom:hover {
-        background-color: #fdf2f8;
-        color: #9d174d;
+    .btn-buat {
+        background: linear-gradient(135deg, #f472b6 0%, #ec4899 100%);
+        border: none;
+        border-radius: 1rem;
+        padding: 0.6rem 1.4rem;
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: #fff;
+        box-shadow: 0 6px 15px rgba(236, 72, 153, 0.25);
+        transition: all 0.25s ease;
+    }
+
+    .btn-buat:hover {
+        transform: translateY(-2px);
+        color: #fff;
+        box-shadow: 0 10px 20px rgba(236, 72, 153, 0.35);
     }
 
     .table-card {
@@ -90,7 +92,6 @@
         border-radius: 1.25rem;
         overflow: hidden;
         border: 1px solid rgba(255, 255, 255, 0.6);
-        box-shadow: 0 10px 25px rgba(219, 39, 119, 0.05);
     }
 
     .table thead tr {
@@ -98,24 +99,11 @@
     }
 
     .table thead th {
-        border: none;
         font-weight: 700;
         font-size: 0.78rem;
         text-transform: uppercase;
         color: #9d174d !important;
         padding: 0.9rem 0.75rem;
-    }
-
-    .table tbody tr {
-        border-bottom: 1px solid rgba(251, 207, 232, 0.25);
-        background-color: #fff !important;
-    }
-
-    .table tbody td {
-        padding: 0.8rem 0.75rem;
-        color: #4c0519;
-        font-weight: 500;
-        font-size: 0.9rem;
     }
 </style>
 
@@ -124,9 +112,19 @@
 
         <div class="jenis-header">
             <h1>Halaman Jenis Produk</h1>
+            <!-- ✅ TOMBOL TAMBAH BARU DI SINI -->
+            <button type="button" class="btn btn-buat" data-bs-toggle="modal" data-bs-target="#tambahJenisModal">
+                Tambahkan Jenis Baru
+            </button>
         </div>
 
-        <form action="{{ route('admin.jenis.index') }}" method="GET" class="mb-4">
+        @if(session('success'))
+            <div class="alert alert-success mb-3" style="border-radius: 0.75rem;">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <form action="{{ route('admin.jenis.index') }}" method="GET" class="search-form mb-4">
             <div class="input-group" style="max-width: 400px;">
                 <input
                     type="text"
@@ -140,22 +138,24 @@
         </form>
 
         <div class="table-card">
-            <table class="table align-middle text-center m-0">
+            <table class="table table-hover align-middle text-center m-0">
                 <thead>
                     <tr>
-                        <th style="width: 80px;">No</th>
-                        <th class="text-start">Nama Jenis / Kategori</th>
+                        <th scope="col" style="width: 80px;">No</th>
+                        <th scope="col" class="text-start">Nama Jenis / Kategori</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($categories as $index => $cat)
+                    @forelse($categories as $category)
                     <tr>
-                        <td>{{ $categories->firstItem() + $index }}</td>
-                        <td class="text-start fw-bold" style="color: #be185d;">{{ ucfirst($cat->name) }}</td>
+                        <th scope="row">{{ $categories->firstItem() + $loop->index }}</th>
+                        <td class="text-start fw-semibold">{{ $category->nama_jenis }}</td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="2" class="text-center py-4 text-muted">Data jenis tidak ditemukan.</td>
+                        <td colspan="2" class="text-center py-5 text-muted">
+                            <h5 class="m-0" style="font-style: italic;">Data jenis tidak ditemukan.</h5>
+                        </td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -165,7 +165,45 @@
         <div class="d-flex justify-content-end mt-4">
             {{ $categories->links() }}
         </div>
-
     </div>
 </div>
+
+<!-- ✅ KOTAK POPUP (MODAL) FORM TAMBAH DATA JENIS -->
+<div class="modal fade" id="tambahJenisModal" tabindex="-1" aria-hidden="true" style="backdrop-filter: blur(4px);">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 1.5rem;">
+            <div class="modal-header border-0 pt-4 px-4">
+                <h5 class="modal-title fw-bold" style="color: #9d174d;">
+                    <span style="border-left: 5px solid #ec4899; padding-left: 8px;">Tambah Jenis Baru</span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('admin.jenis.store') }}" method="POST">
+                @csrf
+                <div class="modal-body px-4">
+                    <div class="mb-3">
+                        <label for="nama_jenis" class="form-label fw-bold" style="color: #4c0519;">Nama Jenis / Kategori Produk</label>
+                        <input 
+                            type="text" 
+                            name="nama_jenis" 
+                            id="nama_jenis" 
+                            class="form-control @error('nama_jenis') is-invalid @enderror" 
+                            placeholder="Contoh: Makanan, Minuman, Coffee" 
+                            style="border-radius: 0.75rem; border: 1px solid #fbcfe8; padding: 0.6rem 1rem;"
+                            required
+                        >
+                        @error('nama_jenis')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pb-4 px-4">
+                    <button type="button" class="btn btn-light border btn-sm" data-bs-dismiss="modal" style="border-radius: 0.75rem; padding: 0.5rem 1.2rem; font-weight: 600;">Batal</button>
+                    <button type="submit" class="btn btn-buat btn-sm" style="margin: 0; padding: 0.5rem 1.4rem;">Simpan Jenis</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @endsection

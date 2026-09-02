@@ -7,7 +7,7 @@ use App\Http\Controllers\ItemPenjualanController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\JenisController; // Memanggil Controller Jenis
+use App\Http\Controllers\JenisController; 
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'index'])->name('login');
@@ -26,8 +26,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/users/update/{user}', [UserController::class, 'update'])->name('users.update');
         Route::delete('/users/destroy/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
-        // ➕ RUTE BARU: Halaman pengelolaan Jenis/Kategori Produk Cafe
         Route::get('/jenis', [JenisController::class, 'index'])->name('jenis.index');
+        Route::post('/jenis/store', [JenisController::class, 'store'])->name('jenis.store'); 
     });
 
     Route::middleware('role:admin,kasir')->group(function () {
@@ -36,4 +36,3 @@ Route::middleware('auth')->group(function () {
         Route::resource('/itempenjualan', ItemPenjualanController::class);
     });
 });
-// Cek nama commit baru

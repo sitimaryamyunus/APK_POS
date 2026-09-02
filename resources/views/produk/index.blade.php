@@ -313,13 +313,14 @@
                         <tr>
                             <th scope="row">{{ $products->firstItem() + $loop->index }}</th>
                             <td>{{ $product->user?->name ?? 'Tidak Ada Pengguna' }}</td>
-                            <td>
-                                <img
-                                    src="{{ asset('storage/'.$product->foto) }}"
-                                    class="img-thumbnail-custom"
-                                    onerror="this.src='https://via.placeholder.com/42?text=%20'"
-                                >
-                            </td>
+                        <td>
+                            <img
+                                src="{{ asset('storage/'.$product->foto) }}"
+                                class="img-thumbnail-custom"
+                                style="width: 75px; height: 75px; object-fit: cover; border-radius: 8px;"
+                                onerror="this.src='https://placeholder.com'"
+    >
+                        </td>
                             <td class="text-start" style="font-weight: 600;">{{ $product->nama }}</td>
                             <td>Rp {{ number_format($product->harga_beli) }}</td>
                             <td>Rp {{ number_format($product->harga_jual) }}</td>

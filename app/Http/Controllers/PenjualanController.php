@@ -7,6 +7,7 @@ use App\Models\Penjualan;
 use App\Models\Produk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PenjualanController extends Controller
 {
@@ -18,7 +19,6 @@ class PenjualanController extends Controller
         $user = Auth::user();
         $keyword = $request->input('search');
 
-        // PERBAIKAN: Menambahkan with() untuk memuat relasi user, itemPenjualan, dan produk sekaligus
         $sales = Penjualan::query()
             ->with(['user', 'itemPenjualan.produk'])
 
@@ -125,7 +125,8 @@ class PenjualanController extends Controller
             return back()->with('errors', 'Keranjang masih kosong');
         }
 
-        \DB::transaction(function () use ($penjualan, $request) {
+        // Diubah menjadi DB::transaction (tanpa backslash) karena di atas sudah di-import
+        DB::transaction(function () use ($penjualan, $request) {
 
             // 🔄 Hitung ulang total (anti manipulasi)
             $total = $penjualan->itemPenjualan()->sum('subtotal');
