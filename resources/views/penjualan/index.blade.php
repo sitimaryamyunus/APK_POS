@@ -428,9 +428,8 @@
                                 <td>
                                     <img
                                         src="{{ asset('storage/' . ($item->produk?->foto)) }}"
-                                        style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px; border: 1px solid #fbcfe8;"
-                                        onerror="this.src='https://placeholder.com'"
-                                    >
+                                        style="width: 50px; height: 50px; object-fit: contain; background-color: #f8f9fa; border-radius: 6px; border: 1px solid #fbcfe8;"
+                                        onerror="this.src='https://placehold.com'">
                                 </td>
                                 <td class="text-start fw-semibold">{{ $item->produk->nama ?? $item->produk->name ?? 'Produk Dihapus' }}</td>
                                 <td>Rp {{ number_format($item->harga_satuan, 0, ',', '.') }}</td>

@@ -286,13 +286,18 @@
                     name="search"
                     value="{{ request('search') }}"
                     class="form-control search-box-custom"
-                    placeholder="Cari nama produk..."
-                >
+                    placeholder="Cari nama produk...">
                 <button class="btn btn-cari-custom" type="submit">
                     Cari
                 </button>
             </div>
         </form>
+
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert" style="background-color: #d1e7dd; color: #0f5132; padding: 12px; border-radius: 8px; margin-top: 15px; margin-bottom: 15px; border: 1px solid #badbcc;">
+                {{ session('success') }}
+            </div>
+        @endif
 
         <div class="table-card">
             <table class="table table-hover align-middle text-center">
@@ -314,13 +319,13 @@
                             <th scope="row">{{ $products->firstItem() + $loop->index }}</th>
                             <td>{{ $product->user?->name ?? 'Tidak Ada Pengguna' }}</td>
                         <td>
-                            <img
+                           <img
                                 src="{{ asset('storage/'.$product->foto) }}"
                                 class="img-thumbnail-custom"
-                                style="width: 75px; height: 75px; object-fit: cover; border-radius: 8px;"
-                                onerror="this.src='https://placeholder.com'"
-    >
+                                style="width: 75px; height: 75px; object-fit: contain; background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px;"
+                                onerror="this.src='https://placehold.com'">
                         </td>
+
                             <td class="text-start" style="font-weight: 600;">{{ $product->nama }}</td>
                             <td>Rp {{ number_format($product->harga_beli) }}</td>
                             <td>Rp {{ number_format($product->harga_jual) }}</td>

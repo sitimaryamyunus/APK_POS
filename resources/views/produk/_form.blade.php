@@ -188,19 +188,21 @@
     </div>
 
     <div class="col-md-4">
-        <div class="foto-box-wrap">
-            <span class="foto-box-label">Preview Foto</span>
-            <div class="foto-box">
-                @if (isset($produk) && !empty($produk->foto))
-                    <img id="preview" src="{{ asset('storage/'.$produk->foto) }}">
-                @else
-                    <img id="preview" style="display:none">
-                    <span id="previewPlaceholder">Belum ada foto dipilih</span>
-                @endif
-            </div>
+    <div class="foto-box-wrap">
+        <span class="foto-box-label">Preview Foto</span>
+        <div class="foto-box">
+            @if (isset($produk) && !empty($produk->foto))
+                <!-- Tambahkan inline style di bawah ini -->
+                <img id="preview" src="{{ asset('storage/'.$produk->foto) }}" style="width: 100%; height: 100%; object-fit: contain; background-color: #f8f9fa;">
+            @else
+                <!-- Pastikan tag img cadangan ini juga punya style yang sama saat nanti muncul -->
+                <img id="preview" style="display:none; width: 100%; height: 100%; object-fit: contain; background-color: #f8f9fa;">
+                <span id="previewPlaceholder">Belum ada foto dipilih</span>
+            @endif
         </div>
     </div>
 </div>
+
 
 <div class="form-row">
     <label>Nama Produk</label>

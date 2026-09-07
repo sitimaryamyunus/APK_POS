@@ -27,7 +27,10 @@ Route::middleware('auth')->group(function () {
         Route::delete('/users/destroy/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
         Route::get('/jenis', [JenisController::class, 'index'])->name('jenis.index');
-        Route::post('/jenis/store', [JenisController::class, 'store'])->name('jenis.store'); 
+        Route::post('/jenis/store', [JenisController::class, 'store'])->name('jenis.store');
+        Route::put('/jenis/update/{id}', [JenisController::class, 'update'])->name('jenis.update');
+        Route::delete('/jenis/destroy/{id}', [JenisController::class, 'destroy'])->name('jenis.destroy');
+
     });
 
     Route::middleware('role:admin,kasir')->group(function () {
