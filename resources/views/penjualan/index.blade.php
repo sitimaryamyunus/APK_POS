@@ -356,7 +356,7 @@
                                     <a href="{{ route('penjualan.edit', $sale) }}" class="btn btn-edit-akun btn-sm">Edit</a>
                                 @endcan
                                 
-                                @can('delete', $sale)
+                                {{-- Tombol hapus sekarang langsung muncul di sebelah detail --}}
                                 <form action="{{ route('penjualan.destroy', $sale) }}" method="POST" class="d-inline m-0">
                                     @csrf
                                     @method('DELETE')
@@ -364,7 +364,6 @@
                                         Hapus
                                     </button>
                                 </form>
-                                @endcan
                             </div>
                         </td>
                     </tr>
@@ -384,6 +383,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- BLOK POPUP MODAL DETAIL ITEMS -->
 @foreach($sales as $sale)
@@ -445,6 +445,21 @@
                                 <td colspan="5" class="text-end py-2" style="color: #4c0519;">TOTAL AKHIR :</td>
                                 <td class="text-end py-2" style="font-size: 1.05rem; padding-right: 1rem; color: #be185d;">Rp {{ number_format($sale->total_pembayaran, 0, ',', '.') }}</td>
                             </tr>
+                            
+                            {{-- ===================== TAMBAHAN UANG DIBAYAR & KEMBALIAN ===================== --}}
+                            <tr class="fw-bold" style="border-top: 1px dashed #fbcfe8;">
+                                <td colspan="5" class="text-end py-2" style="color: #4c0519;">UANG DIBAYAR :</td>
+                                <td class="text-end py-2" style="padding-right: 1rem; color: #1e293b;">
+                                    Rp {{ number_format($sale->uang_dibayar ?? 0, 0, ',', '.') }}
+                                </td>
+                            </tr>
+                            <tr class="fw-bold">
+                                <td colspan="5" class="text-end py-2" style="color: #4c0519;">KEMBALIAN :</td>
+                                <td class="text-end py-2" style="padding-right: 1rem; color: #16a34a;">
+                                    Rp {{ number_format(($sale->uang_dibayar ?? 0) > 0 ? ($sale->uang_dibayar - $sale->total_pembayaran) : 0, 0, ',', '.') }}
+                                </td>
+                            </tr>
+                            {{-- ============================================================================== --}}
                         </tbody>
                     </table>
                 </div>

@@ -438,11 +438,33 @@
                         @csrf
                         @method('PUT')
 
-                        <select name="payment_method" class="form-select select-pembayaran" {{ $sale->status === 'COMPLETED' ? 'disabled' : '' }}>
+                        {{-- Perubahan: Menambahkan id="payment_method" dan event onchange --}}
+                        <select id="payment_method" name="payment_method" class="form-select select-pembayaran mb-2" {{ $sale->status === 'COMPLETED' ? 'disabled' : '' }} onchange="togglePembayaranCash()">
                             <option value="">Pilih Pembayaran</option>
                             <option value="CASH">Cash</option>
                             <option value="QRIS">QRIS</option>
                         </select>
+
+                        {{-- ===================== BUNGKUS KHUSUS UNTUK CASH ===================== --}}
+                        <div id="section_cash" style="display: none;">
+                            {{-- Input Uang Dibayar --}}
+                            <div class="mb-2">
+                                <input type="number" 
+                                    id="uang_dibayar" 
+                                    name="uang_dibayar" 
+                                    class="form-control mb-2" 
+                                    placeholder="Uang Dibayar (Rp)..." 
+                                    min="{{ $sale->total_pembayaran }}"
+                                    {{ $sale->status === 'COMPLETED' ? 'disabled' : '' }}
+                                    oninput="hitungKembalian()">
+                            </div>
+
+                            {{-- Teks Hasil Kembalian Otomatis --}}
+                            <div class="mb-3 text-end" style="font-weight: bold; color: #15803d;">
+                                Kembalian: <span id="label_kembalian">Rp 0</span>
+                            </div>
+                        </div>
+                        {{-- ============================================================================== --}}
 
                         <button class="btn-checkout" {{ $sale->status === 'COMPLETED' ? 'disabled' : '' }}>
                             Checkout
@@ -464,5 +486,47 @@
         </div>
     </div>
 </div>
+
+{{-- SCRIPT JAVASCRIPT LOGIKA KASIR --}}
+<script>
+    // Fungsi untuk menyembunyikan / menampilkan kolom Cash
+    function togglePembayaranCash() {
+        const method = document.getElementById('payment_method').value;
+        const sectionCash = document.getElementById('section_cash');
+        const inputUang = document.getElementById('uang_dibayar');
+
+        if (method === 'CASH') {
+            sectionCash.style.display = 'block'; // Tampilkan jika pilih Cash
+            inputUang.required = true;           // Wajib diisi kalau Cash
+            inputUang.value = '';                // Reset input
+            document.getElementById('label_kembalian').innerText = 'Rp 0';
+        } else {
+            sectionCash.style.display = 'none';  // Sembunyikan jika pilih QRIS atau kosong
+            inputUang.required = false;          // Tidak wajib diisi
+            inputUang.value = '{{ $sale->total_pembayaran }}'; // Otomatis set senilai total pembayaran agar validasi controller lolos
+        }
+    }
+
+    // Fungsi hitung kembalian real-time
+    function hitungKembalian() {
+        const total = {{ $sale->total_pembayaran }};
+        let rawValue = document.getElementById('uang_dibayar').value;
+        let cleanValue = rawValue.replace(/\./g, ''); 
+        
+        const dibayar = parseFloat(cleanValue) || 0;
+        const kembalian = dibayar - total;
+
+        if (kembalian >= 0) {
+            document.getElementById('label_kembalian').innerText = 'Rp ' + kembalian.toLocaleString('id-ID');
+        } else {
+            document.getElementById('label_kembalian').innerText = 'Uang kurang';
+        }
+    }
+
+    // Jalankan fungsi saat halaman pertama kali dimuat untuk menyesuaikan status awal
+    document.addEventListener("DOMContentLoaded", function() {
+        togglePembayaranCash();
+    });
+</script>
 
 @endsection

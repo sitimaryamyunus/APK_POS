@@ -113,8 +113,15 @@ class PenjualanController extends Controller
      */
     public function update(Request $request, Penjualan $penjualan)
     {
+        // 🔄 Hitung ulang total asli dari keranjang terlebih dahulu
+        $total = $penjualan->itemPenjualan()->sum('subtotal');
+
         $request->validate([
-            'payment_method' => 'required|in:CASH,QRIS'
+            'payment_method' => 'required|in:CASH,QRIS',
+            'uang_dibayar'   => 'required|numeric|min:' . $total // Validasi nominal uang harus cukup
+        ], [
+            'uang_dibayar.required' => 'Nominal uang dibayar wajib diisi.',
+            'uang_dibayar.min'      => 'Uang yang dibayarkan kurang dari total pembayaran.'
         ]);
 
         if ($penjualan->status !== 'OPEN') {
@@ -125,16 +132,12 @@ class PenjualanController extends Controller
             return back()->with('errors', 'Keranjang masih kosong');
         }
 
-        // Diubah menjadi DB::transaction (tanpa backslash) karena di atas sudah di-import
-        DB::transaction(function () use ($penjualan, $request) {
-
-            // 🔄 Hitung ulang total (anti manipulasi)
-            $total = $penjualan->itemPenjualan()->sum('subtotal');
-
+        DB::transaction(function () use ($penjualan, $request, $total) {
             $penjualan->update([
                 'metode_pembayaran' => $request->payment_method,
-                'total_pembayaran' => $total,
-                'status' => 'COMPLETED'
+                'total_pembayaran'  => $total,
+                'uang_dibayar'      => $request->uang_dibayar, // 💾 Menyimpan uang dibayar ke DB
+                'status'            => 'COMPLETED'
             ]);
         });
 
@@ -151,35 +154,29 @@ class PenjualanController extends Controller
     {
         $this->authorize('delete', $penjualan);
 
-        // ! Pastikan hanya transaksi OPEN
-        if ($penjualan->status !== 'OPEN') {
-            return redirect()
-                ->route('penjualan.index')
-                ->with('errors', 'Transaksi sudah selesai tidak bisa dibatalkan');
-        }
-
-        // ! Pastikan milik user login (kasir)
-        if ($penjualan->user_id !== Auth::id()) {
-            return redirect()
-                ->route('penjualan.index');
+        // 🔒 Validasi opsional: Jika selain admin tidak boleh menghapus transaksi kasir lain
+        if (Auth::user()->role->name !== 'admin' && $penjualan->user_id !== Auth::id()) {
+            return redirect()->route('penjualan.index')->with('errors', 'Anda tidak berhak menghapus transaksi ini');
         }
 
         DB::transaction(function () use ($penjualan) {
 
             foreach ($penjualan->itemPenjualan as $item) {
-                // 🔼 kembalikan stok
-                $item->produk->increment('stok', $item->kuantitas);
+                // 🔼 Kembalikan stok ke gudang secara otomatis saat transaksi dihapus
+                if ($item->produk) {
+                    $item->produk->increment('stok', $item->kuantitas);
+                }
             }
 
-            // ❌ hapus item
+            // ❌ Hapus item relasi keranjang
             $penjualan->itemPenjualan()->delete();
 
-            // ❌ hapus penjualan
+            // ❌ Hapus data induk penjualan
             $penjualan->delete();
         });
 
         return redirect()
             ->route('penjualan.index')
-            ->with('success', 'Transaksi berhasil dibatalkan');
+            ->with('success', 'Transaksi berhasil dihapus dan stok dikembalikan');
     }
 }

@@ -260,8 +260,16 @@
                         stroke-width="12" stroke-linecap="round" />
                 </svg>
             </div>
-            <!-- Perubahan Nama Judul -->
+            <!-- Perubahan Name Judul -->
             <h5>Masuk POS CAFE</h5>
+
+            {{-- ===================== WADAH NOTIFIKASI BERHASIL LOGOUT ===================== --}}
+            @if(session('success'))
+                <div class="alert alert-success mx-auto mt-3 mb-1" style="background-color: #fdf2f8; color: #be185d; border: 1px solid #fbcfe8; padding: 10px; border-radius: 0.75rem; text-align: center; font-weight: 600; font-size: 0.85rem; max-width: 90%;">
+                    {{ session('success') }}
+                </div>
+            @endif
+            {{-- ============================================================================ --}}
         </div>
         <div class="card-body">
             <form action="{{ route('auth') }}" method="POST">

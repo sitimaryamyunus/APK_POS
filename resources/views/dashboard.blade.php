@@ -198,6 +198,14 @@
 
 <div class="container dashboard-wrap mt-4">
 
+    {{-- ===================== WADAH NOTIFIKASI BERHASIL LOGIN HIJAU ===================== --}}
+    @if(session('succes'))
+        <div class="alert alert-success mb-4 text-start" style="background-color: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; padding: 12px 16px; border-radius: 0.75rem; font-weight: 500; font-size: 0.9rem;">
+            {{ session('succes') }}
+        </div>
+    @endif
+    {{-- ================================================================================= --}}
+
     <!-- Row 1: Today's Sales -->
     <div class="dashboard-section">
         <h1>Penjualan Hari Ini</h1>

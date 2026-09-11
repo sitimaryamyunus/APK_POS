@@ -110,12 +110,15 @@
 <div class="container jenis-wrap py-4">
     <div class="jenis-section">
 
-        <div class="jenis-header">
-            <h1>Halaman Jenis</h1>
-            <button type="button" class="btn btn-buat" data-bs-toggle="modal" data-bs-target="#tambahJenisModal">
-                Tambahkan Jenis Baru
-            </button>
-        </div>
+       <div class="jenis-header">
+    <h1>Halaman Jenis</h1>
+    @if(auth()->user()->role->name === 'admin')
+        <button type="button" class="btn btn-buat" data-bs-toggle="modal" data-bs-target="#tambahJenisModal">
+            Tambahkan Jenis Baru
+        </button>
+    @endif
+</div>
+
 
         @if(session('success'))
             <div class="alert alert-success mb-3" style="border-radius: 0.75rem;">
@@ -145,66 +148,74 @@
                         <th scope="col" style="width: 180px;">Aksi</th> <!-- Tambah kolom Aksi -->
                     </tr>
                 </thead>
-                <tbody>
+               <tbody>
                     @forelse($categories as $category)
                     <tr>
                         <th scope="row">{{ $categories->firstItem() + $loop->index }}</th>
                         <td class="text-start fw-semibold">{{ $category->nama_jenis }}</td>
-                       <td>
+                        <td>
                             <div class="d-flex align-items-center justify-content-center gap-2">
-                                <button type="button" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#editJenisModal{{ $category->id }}" 
-                                    style="background-color: #fce7f3 !important; color: #9d174d !important; border: 1px solid #fbcfe8 !important; border-radius: 12px !important; padding: 6px 16px; font-weight: 600; font-size: 14px; box-shadow: none;">
-                                       Edit
-                                </button>
-                            <form action="{{ route('admin.jenis.destroy', $category->id) }}" method="POST" class="d-inline m-0" onsubmit="return confirm('Apakah anda yakin akan menghapus jenis kategori ini?')">
-                    @csrf
-                    @method('DELETE')
-                                <button type="submit" class="btn btn-sm" 
-                                    style="background-color: #ffe4e6 !important; color: #9f1239 !important; border: 1px solid #fecdd3 !important; border-radius: 12px !important; padding: 6px 16px; font-weight: 600; font-size: 14px; box-shadow: none;">
-                                       Hapus
-                                </button>
-                            </form>
+                                {{-- 🔒 PEMBATASAN AKSES: Tombol Edit dan Hapus hanya akan muncul jika Admin yang login --}}
+                                @if(auth()->user()->role->name === 'admin')
+                                    <button type="button" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#editJenisModal{{ $category->id }}" 
+                                        style="background-color: #fce7f3 !important; color: #9d174d !important; border: 1px solid #fbcfe8 !important; border-radius: 12px !important; padding: 6px 16px; font-weight: 600; font-size: 14px; box-shadow: none;">
+                                           Edit
+                                    </button>
+                                    
+                                    <form action="{{ route('admin.jenis.destroy', $category->id) }}" method="POST" class="d-inline m-0" onsubmit="return confirm('Apakah anda yakin akan menghapus jenis kategori ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm" 
+                                            style="background-color: #ffe4e6 !important; color: #9f1239 !important; border: 1px solid #fecdd3 !important; border-radius: 12px !important; padding: 6px 16px; font-weight: 600; font-size: 14px; box-shadow: none;">
+                                               Hapus
+                                        </button>
+                                    </form>
+                                @else
+                                    {{-- Tampilan pengganti yang ramah jika Kasir yang sedang membuka halaman --}}
+                                    <span class="text-muted" style="font-style: italic; font-size: 13px;">Hanya Lihat</span>
+                                @endif
                             </div>
-                      </td>
+                        </td>
 
-
-                    <div class="modal fade" id="editJenisModal{{ $category->id }}" tabindex="-1" aria-hidden="true" style="backdrop-filter: blur(4px);">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content border-0 shadow-lg" style="border-radius: 1.5rem;">
-                                <div class="modal-header border-0 pt-4 px-4">
-                                    <h5 class="modal-title fw-bold" style="color: #9d174d;">
-                                        <span style="border-left: 5px solid #ffc107; padding-left: 8px;">Edit Jenis / Kategori</span>
-                                    </h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <form action="{{ route('admin.jenis.update', $category->id) }}" method="POST">
-                                    @csrf
-                                    @method('PUT')
-                                    <div class="modal-body px-4">
-                                        <div class="mb-3 text-start">
-                                            <label for="nama_jenis_{{ $category->id }}" class="form-label fw-bold" style="color: #4c0519;">Nama Jenis / Kategori Produk</label>
-                                            <input 
-                                                type="text" 
-                                                name="nama_jenis" 
-                                                id="nama_jenis_{{ $category->id }}" 
-                                                value="{{ old('nama_jenis', $category->nama_jenis) }}"
-                                                class="form-control @error('nama_jenis') is-invalid @enderror" 
-                                                style="border-radius: 0.75rem; border: 1px solid #fbcfe8; padding: 0.6rem 1rem;"
-                                                required
-                                            >
-                                            @error('nama_jenis')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
+                        {{-- Modal edit diletakkan di dalam perulangan agar datanya sinkron --}}
+                        <div class="modal fade" id="editJenisModal{{ $category->id }}" tabindex="-1" aria-hidden="true" style="backdrop-filter: blur(4px);">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content border-0 shadow-lg" style="border-radius: 1.5rem;">
+                                    <div class="modal-header border-0 pt-4 px-4">
+                                        <h5 class="modal-title fw-bold" style="color: #9d174d;">
+                                            <span style="border-left: 5px solid #ffc107; padding-left: 8px;">Edit Jenis / Kategori</span>
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form action="{{ route('admin.jenis.update', $category->id) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <div class="modal-body px-4">
+                                            <div class="mb-3 text-start">
+                                                <label for="nama_jenis_{{ $category->id }}" class="form-label fw-bold" style="color: #4c0519;">Nama Jenis / Kategori Produk</label>
+                                                <input 
+                                                    type="text" 
+                                                    name="nama_jenis" 
+                                                    id="nama_jenis_{{ $category->id }}" 
+                                                    value="{{ old('nama_jenis', $category->nama_jenis) }}"
+                                                    class="form-control @error('nama_jenis') is-invalid @enderror" 
+                                                    style="border-radius: 0.75rem; border: 1px solid #fbcfe8; padding: 0.6rem 1rem;"
+                                                    required
+                                                >
+                                                @error('nama_jenis')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="modal-footer border-0 pb-4 px-4">
-                                        <button type="button" class="btn btn-light border btn-sm" data-bs-dismiss="modal" style="border-radius: 0.75rem; padding: 0.5rem 1.2rem; font-weight: 600;">Batal</button>
-                                        <button type="submit" class="btn btn-sm" style="margin: 0; padding: 0.5rem 1.4rem; background-color: #ffc107; color: white; border: none; border-radius: 0.75rem; font-weight: 600;">Simpan Perubahan</button>
-                                    </div>
-                                </form>
+                                        <div class="modal-footer border-0 pb-4 px-4">
+                                            <button type="button" class="btn btn-light border btn-sm" data-bs-dismiss="modal" style="border-radius: 0.75rem; padding: 0.5rem 1.2rem; font-weight: 600;">Batal</button>
+                                            <button type="submit" class="btn btn-sm" style="margin: 0; padding: 0.5rem 1.4rem; background-color: #ffc107; color: white; border: none; border-radius: 0.75rem; font-weight: 600;">Simpan Perubahan</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </tr>
                     @empty
                     <tr>
                         <td colspan="3" class="text-center py-5 text-muted">
@@ -260,3 +271,4 @@
 </div>
 
 @endsection
+

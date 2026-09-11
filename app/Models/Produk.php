@@ -13,12 +13,22 @@ class Produk extends Model
 
     protected $fillable = [
         'user_id' ,
+        'jenis_id' , // 💾 Izin kolom foreign key relasi jenis produk
         'foto' ,
         'nama' ,
         'harga_beli' ,
         'harga_jual' ,
         'stok'
     ];
+
+    /**
+     * 🔗 MENYAMBUNGKAN RELASI KE MODEL JENIS
+     * Berfungsi agar nama kategori jenis bisa ditarik ke tabel produk
+     */
+    public function jenis()
+    {
+        return $this->belongsTo(Jenis::class, 'jenis_id');
+    }
 
     public function user()
     {

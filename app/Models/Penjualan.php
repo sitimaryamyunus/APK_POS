@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo; // Tambahan import untuk relasi kasir
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Penjualan extends Model
@@ -17,11 +17,11 @@ class Penjualan extends Model
         'user_id',
         'total_pembayaran',
         'metode_pembayaran',
-        'status'
+        'status',
+        'uang_dibayar'
     ];
 
     /**
-     * 💡 KUNCI JAWABAN: Fungsi ini yang menghubungkan data Penjualan ke tabel Users (Kasir)
      */
     public function user(): BelongsTo
     {

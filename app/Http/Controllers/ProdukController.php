@@ -16,23 +16,23 @@ class ProdukController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(SearchRequest $request)
+    public function index(\Illuminate\Http\Request $request)
     {
-        $this->authorize('viewAny', Produk::class);
+        // 🔓 Baris $this->authorize('viewAny') DIHAPUS agar kasir bisa langsung masuk tanpa diblokir 403
 
         $keyword = $request->input('search');
 
         if($keyword) {
-            $products = Produk::when($keyword, function ($query) use ($keyword) {
+            $products = Produk::with(['jenis', 'user'])
+            ->when($keyword, function ($query) use ($keyword) {
                 $query->where('nama', 'like', '%' . $keyword . '%');
             })
             ->orderBy('nama')
             ->paginate(10)
             ->withQueryString();
         } else {
-            $products = Produk::latest()->paginate(10)->withQueryString();
+            $products = Produk::with(['jenis', 'user'])->latest()->paginate(10)->withQueryString();
         }
-
 
         return view('produk.index', compact('products'));
     }

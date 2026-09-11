@@ -18,6 +18,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+    // GRUP KHUSUS ADMIN (Data users tetap terkunci hanya untuk admin)
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
         Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
@@ -25,17 +26,18 @@ Route::middleware('auth')->group(function () {
         Route::get('/users/edit/{user}', [UserController::class, 'edit'])->name('users.edit');
         Route::post('/users/update/{user}', [UserController::class, 'update'])->name('users.update');
         Route::delete('/users/destroy/{user}', [UserController::class, 'destroy'])->name('users.destroy');
-
-        Route::get('/jenis', [JenisController::class, 'index'])->name('jenis.index');
-        Route::post('/jenis/store', [JenisController::class, 'store'])->name('jenis.store');
-        Route::put('/jenis/update/{id}', [JenisController::class, 'update'])->name('jenis.update');
-        Route::delete('/jenis/destroy/{id}', [JenisController::class, 'destroy'])->name('jenis.destroy');
-
     });
 
+    // GRUP BERSAMA: ADMIN & KASIR (Akses jenis dipindahkan ke sini agar kasir bisa melihat data)
     Route::middleware('role:admin,kasir')->group(function () {
         Route::resource('/produk', ProdukController::class);
         Route::resource('/penjualan', PenjualanController::class);
         Route::resource('/itempenjualan', ItemPenjualanController::class);
+        
+        // 🌟 DAFTAR RUTE LENGKAP JENIS (Menyediakan rute index, store, update, dan destroy)
+        Route::get('/admin/jenis', [JenisController::class, 'index'])->name('admin.jenis.index');
+        Route::post('/admin/jenis/store', [JenisController::class, 'store'])->name('admin.jenis.store');
+        Route::put('/admin/jenis/update/{id}', [JenisController::class, 'update'])->name('admin.jenis.update');
+        Route::delete('/admin/jenis/destroy/{id}', [JenisController::class, 'destroy'])->name('admin.jenis.destroy');
     });
 });
