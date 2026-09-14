@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light"> 
     <div class="container"> 
-        <!-- Logo Brand: Ikon Cafe + Tulisan POS CAFE -->
-        <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="#" style="color: #be185d;">
+        <!-- Logo Brand: Ikon Cafe + Tulisan POS CAFE (Sekarang Mengarah ke Halaman Tentang Kami) -->
+        <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="{{ route('tentang.kami') }}" style="color: #be185d;">
             <!-- Ikon Kedai Kopi Mini -->
             <div style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; background: #fdf2f8; border: 1px solid #fbcfe8; border-radius: 6px; padding: 3px;">
                 <svg viewBox="0 0 512 512" xmlns="http://w3.org" style="width: 100%; height: 100%;">
@@ -17,7 +17,7 @@
                     <path d="M220,230c15,0,20,15,35,15s20-15,35-15,20,15,35,15,20-15,35-15" fill="none" stroke="#4c0519" stroke-width="12" stroke-linecap="round"/>
                 </svg>
             </div>
-            <span style="letter-spacing: -0.3px;">POS CAFE</span>
+            <span style="letter-spacing: -0.3px;">Rosé Cafe</span>
         </a> 
         
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> 
@@ -32,7 +32,6 @@
                     <a class="nav-link {{ Request::is('admin/users*') || Request::is('admin/users') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">Users</a>
                 </li>
                 
-                <!-- MENU BARU: Menyisipkan Jenis sebelum Produk dengan Indentasi Rapi -->
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('admin/jenis*') ? 'active' : '' }}" href="{{ route('admin.jenis.index') }}">Jenis</a>
                 </li>
@@ -54,7 +53,6 @@
 </nav>
 
 <style>
-    /* Mengubah tombol keluar menjadi gradasi pink estetik */
     .btn-logout {
         background: linear-gradient(135deg, #f472b6 0%, #ec4899 100%) !important;
         border: none !important;

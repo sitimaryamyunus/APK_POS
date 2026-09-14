@@ -260,8 +260,8 @@
                         stroke-width="12" stroke-linecap="round" />
                 </svg>
             </div>
-            <!-- Perubahan Name Judul -->
-            <h5>Masuk POS CAFE</h5>
+            
+            <h5 class="fw-bold" style="color: #be185d; font-size: 1.5rem; margin-top: 5px;">Rosé Cafe</h5>
 
             {{-- ===================== WADAH NOTIFIKASI BERHASIL LOGOUT ===================== --}}
             @if(session('success'))
@@ -299,8 +299,8 @@
                         </svg>
                         <input type="password" name="password" class="form-control" id="exampleInputPassword1"
                             placeholder="Masukan Kata Sandi">
-                        <button type="button" class="toggle-password" id="togglePassword"
-                            aria-label="Tampilkan kata sandi">
+                        
+                        <button type="button" class="toggle-password" id="togglePassword" aria-label="Tampilkan kata sandi">
                             <svg id="eyeIcon" xmlns="http://w3.org" viewBox="0 0 16 16" fill="currentColor">
                                 <path
                                     d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
@@ -310,7 +310,8 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-login">Masuk POS</button>
+                {{-- ✨ Mengubah teks menjadi Masuk saja agar minimalis --}}
+                <button type="submit" class="btn btn-login">Masuk</button>
             </form>
         </div>
     </div>
@@ -330,7 +331,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (eyeIcon) {
                     eyeIcon.setAttribute('fill', '#db2777');
                     eyeIcon.innerHTML =
-                        '<path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a11.95 11.95 0 0 0-2.778.344l1.157 1.157A11.77 11.77 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755q-.247.248-.516.467zM11.242 9.123 9.123 7.004a2.5 2.5 0 0 0-3.12 3.12l2.12-2.122a.5.5 0 0 1 .707 0l1.414 1.414a.5.5 0 0 1 0 .707l-2.12 2.122a2.5 2.5 0 0 0 3.12-3.12M1 8s3-5.5 8-5.5a11.95 11.95 0 0 1 2.778.344l-1.157 1.157A11.77 11.77 0 0 0 8 4.5c-2.12 0-3.879 1.168-5.168 2.457A13.134 13.134 0 0 0 1.172 8c.058.087.122.183.195.288.335.48.83 1.12 1.465 1.755q.247.248.516.467l-1.158 1.158L1 8z"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708z"/>';
+                        '<path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a11.95 11.95 0 0 0-2.778.344l1.157 1.157A11.77 11.77 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755q-.247.248-.516.467zM11.242 9.123 9.123 7.004a2.5 2.5 0 0 0-3.12 3.12l2.12-2.122a.5.5 0 0 1 .707 0l1.414 1.414a.5.5 0 0 1 0 .707l-2.12 2.122a2.5 2.5 0 0 0 3.12-3.12M1 8s3-5.5 8-5.5a11.95 11.95 0 0 1 2.778.344l-1.157 1.157A11.77 11.77 0 0 0 8 4.5c-2.12 0-3.879 1.168-5.168 2.457A13.134 13.134 0 0 0 1.172 8c.058.087.122.183.195.288-.335.48.83 1.12 1.465 1.755q.247.248.516.467l-1.158 1.158L1 8z"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708z"/>';
                 }
             } else {
                 passwordField.type = 'password';

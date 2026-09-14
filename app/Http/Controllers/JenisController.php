@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Jenis; // ✅ Sudah diganti menggunakan Jenis
+use App\Models\Jenis;
 use Illuminate\Http\Request;
 
 class JenisController extends Controller
@@ -37,5 +37,33 @@ class JenisController extends Controller
         return redirect()
             ->route('admin.jenis.index')
             ->with('success', 'Jenis produk baru berhasil ditambahkan!');
+    }
+
+    // Menghapus data jenis dari database
+    public function destroy($id)
+    {
+        $jenis = Jenis::findOrFail($id);
+        $jenis->delete();
+
+        return redirect()
+            ->route('admin.jenis.index')
+            ->with('success', 'Jenis produk berhasil dihapus!');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nama_jenis' => 'required|string|max:255|unique:jenis,nama_jenis,' . $id
+        ]);
+
+        $jenis = Jenis::findOrFail($id);
+        
+        $jenis->update([
+            'nama_jenis' => $request->nama_jenis
+        ]);
+
+        return redirect()
+            ->route('admin.jenis.index')
+            ->with('success', 'Jenis produk berhasil diperbarui!');
     }
 }

@@ -18,6 +18,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+    // RUTE HALAMAN TENTANG KAMI (Bisa diakses Admin & Kasir setelah login)
+    Route::get('/tentang-kami', function () {
+        return view('tentang kami.index');
+    })->name('tentang.kami');
+
     // GRUP KHUSUS ADMIN (Data users tetap terkunci hanya untuk admin)
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
@@ -34,7 +39,6 @@ Route::middleware('auth')->group(function () {
         Route::resource('/penjualan', PenjualanController::class);
         Route::resource('/itempenjualan', ItemPenjualanController::class);
         
-        // 🌟 DAFTAR RUTE LENGKAP JENIS (Menyediakan rute index, store, update, dan destroy)
         Route::get('/admin/jenis', [JenisController::class, 'index'])->name('admin.jenis.index');
         Route::post('/admin/jenis/store', [JenisController::class, 'store'])->name('admin.jenis.store');
         Route::put('/admin/jenis/update/{id}', [JenisController::class, 'update'])->name('admin.jenis.update');

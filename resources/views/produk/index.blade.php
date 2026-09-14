@@ -128,18 +128,23 @@
         white-space: nowrap;
     }
 
-    /* Semua baris data putih solid, tidak ada zebra */
     .table tbody tr {
         border-bottom: 1px solid rgba(251, 207, 232, 0.25);
-        background-color: #fff !important;
+        background: transparent;
     }
 
     .table tbody tr:last-child {
         border-bottom: none;
     }
 
+    /* Efek Zebra Selang-seling */
+    .table-striped>tbody>tr:nth-of-type(odd)>* {
+        background-color: rgba(253, 242, 248, 0.35) !important;
+        color: #4c0519;
+    }
+
     .table tbody tr:hover {
-        background-color: rgba(253, 242, 248, 0.6) !important;
+        background-color: rgba(255, 255, 255, 0.6) !important;
     }
 
     .table tbody td,
@@ -286,33 +291,26 @@
                     name="search"
                     value="{{ request('search') }}"
                     class="form-control search-box-custom"
-                    placeholder="Cari nama produk...">
+                    placeholder="Cari nama produk..."
+                >
                 <button class="btn btn-cari-custom" type="submit">
                     Cari
                 </button>
             </div>
         </form>
 
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert" style="background-color: #d1e7dd; color: #0f5132; padding: 12px; border-radius: 8px; margin-top: 15px; margin-bottom: 15px; border: 1px solid #badbcc;">
-                {{ session('success') }}
-            </div>
-        @endif
-
         <div class="table-card">
-            <table class="table table-hover align-middle text-center">
+            <table class="table table-striped table-hover align-middle text-center">
                 <thead>
                     <tr>
                         <th scope="col" style="width: 50px;">No</th>
                         <th scope="col">Pengguna</th>
                         <th scope="col" style="width: 70px;">Foto</th>
                         <th scope="col" class="text-start">Nama</th>
-                        {{-- Header Kolom Jenis --}}
-                        <th scope="col">Jenis</th>
                         <th scope="col">Harga Beli</th>
                         <th scope="col">Harga Jual</th>
                         <th scope="col">Stok</th>
-                        <th scope="col" style="width: 200px;">Aksi</th>
+                        <th scope="col" style="width: 170px;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -321,22 +319,13 @@
                             <th scope="row">{{ $products->firstItem() + $loop->index }}</th>
                             <td>{{ $product->user?->name ?? 'Tidak Ada Pengguna' }}</td>
                             <td>
-                               <img
+                                <img
                                     src="{{ asset('storage/'.$product->foto) }}"
                                     class="img-thumbnail-custom"
-                                    style="width: 75px; height: 75px; object-fit: contain; background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px;"
-                                    onerror="this.src='https://placehold.com'">
+                                    onerror="this.src='https://via.placeholder.com/42?text=%20'"
+                                >
                             </td>
-
                             <td class="text-start" style="font-weight: 600;">{{ $product->nama }}</td>
-                            
-                            {{-- 🌟 MENAMPILKAN NAMA JENIS DARI TABEL RELASI --}}
-                            <td>
-                                <span class="badge text-bg-light border px-2 py-1" style="border-radius: 0.5rem; font-weight: 600; color: #9d174d !important; background-color: #fdf2f8 !important; border-color: #fbcfe8 !important;">
-                                    {{ $product->jenis->nama_jenis ?? 'Belum Diatur' }}
-                                </span>
-                            </td>
-
                             <td>Rp {{ number_format($product->harga_beli) }}</td>
                             <td>Rp {{ number_format($product->harga_jual) }}</td>
                             <td>
@@ -346,11 +335,6 @@
                             </td>
                             <td>
                                 <div class="d-flex align-items-center justify-content-center gap-2">
-                                    {{-- TOMBOL DETAIL --}}
-                                    <button type="button" class="btn btn-detail btn-sm" style="background-color: #fdf2f8; color: #be185d; border: 1px solid #fbcfe8; border-radius: 6px; padding: 4px 10px; font-weight: 600;" data-bs-toggle="modal" data-bs-target="#detailProdukModal{{ $product->id }}">
-                                        Detail
-                                    </button>
-
                                     @can('update', $product)
                                         <a href="{{ route('produk.edit', $product) }}" class="btn btn-edit-akun btn-sm">Edit</a>
                                     @endcan
@@ -359,7 +343,7 @@
                                         <form action="{{ route('produk.destroy', $product) }}" method="POST" class="d-inline m-0">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-hapus btn-sm" onclick="return confirm('Apakah anda yakin akan menghapus produk ini?')">
+                                            <button class="btn btn-hapus btn-sm" onclick="return confirm('Apakah anda yakin akan menghapus produk ini?')">
                                                 Hapus
                                             </button>
                                         </form>
@@ -369,7 +353,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="text-center py-5 text-muted">
+                            <td colspan="8" class="text-center py-5 text-muted">
                                 <h5 class="m-0" style="font-style: italic;">Data produk tidak tersedia.</h5>
                             </td>
                         </tr>
@@ -385,57 +369,4 @@
     </div>
 </div>
 
-{{-- BLOK POPUP MODAL DETAIL DATA PRODUK --}}
-@foreach($products as $product)
-<div class="modal fade" id="detailProdukModal{{ $product->id }}" tabindex="-1" aria-labelledby="detailProdukLabel{{ $product->id }}" aria-hidden="true" style="backdrop-filter: blur(4px); text-align: left !important;">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg" style="border-radius: 1.5rem;">
-            <div class="modal-header border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
-                <h5 class="modal-title fw-bold" id="detailProdukLabel{{ $product->id }}" style="color: #9d174d;">
-                    <span style="border-left: 5px solid #ec4899; padding-left: 8px;">Rincian Data Produk</span>
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body px-4 pb-4 text-center">
-                <div class="mb-4">
-                    <img src="{{ asset('storage/' . $product->foto) }}" 
-                         style="max-width: 160px; max-height: 160px; object-fit: contain; background-color: #f8f9fa; border-radius: 12px; border: 2px solid #fbcfe8;"
-                         onerror="this.src='https://placehold.com'">
-                </div>
-
-                <div class="table-responsive rounded-3 border text-start">
-                    <table class="table table-sm m-0 align-middle">
-                        <tbody>
-                            <tr>
-                                <td class="fw-bold p-2 text-muted" style="width: 140px; font-size: 0.85rem;">NAMA PRODUK</td>
-                                <td class="fw-semibold p-2">: {{ $product->nama }}</td>
-                            </tr>
-                            <tr>
-                                <td class="fw-bold p-2 text-muted" style="font-size: 0.85rem;">JENIS PRODUK</td>
-                                {{-- 🌟 TAMPILAN JENIS DI MODAL DETAIL --}}
-                                <td class="fw-semibold p-2">: {{ $product->jenis->nama_jenis ?? 'Belum Diatur' }}</td>
-                            </tr>
-                            <tr>
-                                <td class="fw-bold p-2 text-muted" style="font-size: 0.85rem;">STOK SEKARANG</td>
-                                <td class="fw-bold p-2" style="color: #be185d;">: {{ $product->stok }} Unit</td>
-                            </tr>
-                            <tr>
-                                <td class="fw-bold p-2 text-muted" style="font-size: 0.85rem;">HARGA JUAL</td>
-                                <td class="fw-bold p-2" style="color: #16a34a;">: Rp {{ number_format($product->harga_jual, 0, ',', '.') }}</td>
-                            </tr>
-                            <tr>
-                                <td class="fw-bold p-2 text-muted" style="font-size: 0.85rem;">HARGA BELI</td>
-                                <td class="fw-semibold p-2">: Rp {{ number_format($product->harga_beli, 0, ',', '.') }}</td>
-                            </tr>
-                            <tr>
-                                <td class="fw-bold p-2 text-muted" style="font-size: 0.85rem;">INPUT OLEH</td>
-                                <td class="fw-semibold p-2">: {{ $product->user?->name ?? 'Sistem' }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endforeach
+@endsection
