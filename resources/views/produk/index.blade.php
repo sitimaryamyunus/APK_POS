@@ -137,12 +137,6 @@
         border-bottom: none;
     }
 
-    /* Efek Zebra Selang-seling */
-    .table-striped>tbody>tr:nth-of-type(odd)>* {
-        background-color: rgba(253, 242, 248, 0.35) !important;
-        color: #4c0519;
-    }
-
     .table tbody tr:hover {
         background-color: rgba(255, 255, 255, 0.6) !important;
     }
@@ -234,6 +228,81 @@
         color: #fff;
     }
 
+    .btn-detail {
+        background-color: rgba(243, 232, 255, 0.7);
+        border: 1px solid #e9d5ff;
+        color: #7e22ce;
+        font-weight: 600;
+        font-size: 0.8rem;
+        border-radius: 0.6rem;
+        padding: 0.35rem 0.85rem;
+        transition: all 0.2s;
+    }
+
+    .btn-detail:hover {
+        background-color: #a855f7;
+        border-color: #a855f7;
+        color: #fff;
+    }
+
+    /* Modal Detail Produk */
+    .detail-modal-content {
+        border: none;
+        border-radius: 1.5rem;
+        overflow: hidden;
+    }
+
+    .detail-modal-header {
+        background: linear-gradient(135deg, #fce7f3 0%, #fae8ff 100%);
+        border: none;
+        padding: 1.5rem 1.75rem 1rem;
+    }
+
+    .detail-modal-header h5 {
+        color: #9d174d;
+        font-weight: 800;
+        margin: 0;
+    }
+
+    .detail-photo {
+        width: 100%;
+        max-width: 180px;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 1rem;
+        border: 3px solid #fbcfe8;
+        background: #fff;
+        display: block;
+        margin: 0 auto 1.25rem;
+    }
+
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.65rem 0;
+        border-bottom: 1px solid #fbcfe8;
+        font-size: 0.9rem;
+    }
+
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+
+    .detail-label {
+        color: #be185d;
+        font-weight: 700;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+
+    .detail-value {
+        color: #4c0519;
+        font-weight: 600;
+        text-align: right;
+    }
+
     /* Pagination */
     .pagination-wrapper {
         display: flex;
@@ -277,6 +346,12 @@
 <div class="container produk-wrap py-4">
     <div class="produk-section">
 
+        @if(session('success'))
+            <div style="background-color: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; padding: 15px 20px; margin-bottom: 20px; border-radius: 8px; font-size: 15px; font-weight: 500;">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <div class="produk-header">
             <h1>Halaman Produk</h1>
             @can('create', App\Models\Produk::class)
@@ -300,7 +375,7 @@
         </form>
 
         <div class="table-card">
-            <table class="table table-striped table-hover align-middle text-center">
+            <table class="table table-hover align-middle text-center">
                 <thead>
                     <tr>
                         <th scope="col" style="width: 50px;">No</th>
@@ -335,6 +410,10 @@
                             </td>
                             <td>
                                 <div class="d-flex align-items-center justify-content-center gap-2">
+                                    <button type="button" class="btn btn-detail btn-sm" data-bs-toggle="modal" data-bs-target="#detailProdukModal{{ $product->id }}">
+                                        Detail
+                                    </button>
+
                                     @can('update', $product)
                                         <a href="{{ route('produk.edit', $product) }}" class="btn btn-edit-akun btn-sm">Edit</a>
                                     @endcan
@@ -368,5 +447,47 @@
 
     </div>
 </div>
+
+{{-- 🔍 MODAL DETAIL PRODUK --}}
+@foreach ($products as $product)
+<div class="modal fade" id="detailProdukModal{{ $product->id }}" tabindex="-1" aria-hidden="true" style="backdrop-filter: blur(4px);">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content detail-modal-content shadow-lg">
+            <div class="detail-modal-header d-flex align-items-center justify-content-between">
+                <h5>Detail Produk</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body px-4 py-4">
+                <img
+                    src="{{ asset('storage/'.$product->foto) }}"
+                    class="detail-photo"
+                    onerror="this.src='https://via.placeholder.com/180?text=%20'"
+                >
+                <h4 class="text-center mb-3" style="color:#4c0519; font-weight:800;">{{ $product->nama }}</h4>
+
+                <div class="detail-row">
+                    <span class="detail-label">Pengguna</span>
+                    <span class="detail-value">{{ $product->user?->name ?? 'Tidak Ada Pengguna' }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Harga Beli</span>
+                    <span class="detail-value">Rp {{ number_format($product->harga_beli) }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Harga Jual</span>
+                    <span class="detail-value">Rp {{ number_format($product->harga_jual) }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Stok</span>
+                    <span class="detail-value {{ $product->stok <= 5 ? 'stok-rendah' : '' }}">{{ $product->stok }}</span>
+                </div>
+            </div>
+            <div class="modal-footer border-0 pb-4 px-4 pt-0">
+                <button type="button" class="btn btn-light border btn-sm" data-bs-dismiss="modal" style="border-radius: 0.75rem; padding: 0.5rem 1.2rem; font-weight: 600;">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
 
 @endsection

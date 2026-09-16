@@ -105,11 +105,53 @@
         color: #9d174d !important;
         padding: 0.9rem 0.75rem;
     }
+
+    /* Tombol Aksi - disamakan dengan halaman Users */
+    .btn-edit-akun {
+        background-color: rgba(251, 207, 232, 0.6);
+        border: 1px solid #fbcfe8;
+        color: #be185d;
+        font-weight: 600;
+        font-size: 0.8rem;
+        border-radius: 0.6rem;
+        padding: 0.35rem 0.85rem;
+        transition: all 0.2s;
+    }
+
+    .btn-edit-akun:hover {
+        background-color: #ec4899;
+        border-color: #ec4899;
+        color: #fff;
+    }
+
+    .btn-hapus {
+        background-color: rgba(254, 228, 226, 0.7);
+        border: 1px solid #fecdd3;
+        color: #e11d48;
+        font-weight: 600;
+        font-size: 0.8rem;
+        border-radius: 0.6rem;
+        padding: 0.35rem 0.85rem;
+        transition: all 0.2s;
+    }
+
+    .btn-hapus:hover {
+        background-color: #e11d48;
+        border-color: #e11d48;
+        color: #fff;
+    }
 </style>
 
 <div class="container jenis-wrap py-4">
     <div class="jenis-section">
 
+
+    @if(session('success'))
+            <div class="alert alert-success mb-3" style="border-radius: 0.75rem;">
+                {{ session('success') }}
+            </div>
+        @endif
+        
         <div class="jenis-header">
             <h1>Halaman Jenis</h1>
             @if(auth()->user()->role->name === 'admin')
@@ -119,12 +161,6 @@
             @endif
         </div>
 
-        @if(session('success'))
-            <div class="alert alert-success mb-3" style="border-radius: 0.75rem;">
-                {{ session('success') }}
-            </div>
-        @endif
-
         <form action="{{ route('admin.jenis.index') }}" method="GET" class="search-form mb-4">
             <div class="input-group" style="max-width: 400px;">
                 <input
@@ -132,7 +168,7 @@
                     name="search"
                     value="{{ request('search') }}"
                     class="form-control search-box-custom"
-                    placeholder="Cari jenis produk..."
+                    placeholder="Cari jenis..."
                 >
                 <button class="btn btn-cari-custom" type="submit">Cari</button>
             </div>
@@ -144,7 +180,7 @@
                     <tr>
                         <th scope="col" style="width: 80px;">No</th>
                         <th scope="col" class="text-start">Nama Jenis / Kategori</th>
-                        <th scope="col" style="width: 180px;">Aksi</th>
+                        <th scope="col" style="width: 190px;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -156,17 +192,15 @@
                             <div class="d-flex align-items-center justify-content-center gap-2">
                                 {{-- 🔒 PEMBATASAN AKSES: Tombol Edit dan Hapus hanya akan muncul jika Admin yang login --}}
                                 @if(auth()->user()->role->name === 'admin')
-                                    <button type="button" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#editJenisModal{{ $category->id }}" 
-                                        style="background-color: #fce7f3 !important; color: #9d174d !important; border: 1px solid #fbcfe8 !important; border-radius: 12px !important; padding: 6px 16px; font-weight: 600; font-size: 14px; box-shadow: none;">
-                                           Edit
+                                    <button type="button" class="btn btn-edit-akun btn-sm" data-bs-toggle="modal" data-bs-target="#editJenisModal{{ $category->id }}">
+                                        Edit
                                     </button>
-                                    
+
                                     <form action="{{ route('admin.jenis.destroy', $category->id) }}" method="POST" class="d-inline m-0" onsubmit="return confirm('Apakah anda yakin akan menghapus jenis kategori ini?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm" 
-                                            style="background-color: #ffe4e6 !important; color: #9f1239 !important; border: 1px solid #fecdd3 !important; border-radius: 12px !important; padding: 6px 16px; font-weight: 600; font-size: 14px; box-shadow: none;">
-                                               Hapus
+                                        <button type="submit" class="btn btn-hapus btn-sm">
+                                            Hapus
                                         </button>
                                     </form>
                                 @else

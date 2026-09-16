@@ -322,6 +322,34 @@
         font-style: italic;
         font-weight: 500;
     }
+
+    /* Panel QRIS */
+    .qris-box {
+        text-align: center;
+        background: rgba(255, 255, 255, 0.75);
+        border: 1px solid #fbcfe8;
+        border-radius: 1.1rem;
+        padding: 1.1rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .qris-box img {
+        max-width: 200px;
+        width: 100%;
+        border: 3px solid #fbcfe8;
+        border-radius: 1rem;
+        padding: 8px;
+        background: #fff;
+        display: block;
+        margin: 0 auto 0.75rem;
+    }
+
+    .qris-box p {
+        color: #831843;
+        font-size: 0.82rem;
+        font-weight: 600;
+        margin: 0;
+    }
 </style>
 
 <div class="container pos-wrap py-4">
@@ -466,6 +494,16 @@
                         </div>
                         {{-- ============================================================================== --}}
 
+                        {{-- ===================== BUNGKUS KHUSUS UNTUK QRIS ===================== --}}
+                        <div id="section_qris" style="display: none;">
+                            <div class="qris-box">
+                                {{-- Ganti src di bawah dengan gambar QRIS asli Rosé Cafe, mis. asset('images/qris-rosecafe.png') --}}
+                                <img src="{{ asset('images/qris-rosecafe.png') }}" alt="Barcode QRIS Rosé Cafe" onerror="this.src='https://via.placeholder.com/200x200?text=QRIS'">
+                                <p>Scan QRIS di atas untuk menyelesaikan pembayaran</p>
+                            </div>
+                        </div>
+                        {{-- ============================================================================== --}}
+
                         <button class="btn-checkout" {{ $sale->status === 'COMPLETED' ? 'disabled' : '' }}>
                             Checkout
                         </button>
@@ -489,21 +527,28 @@
 
 {{-- SCRIPT JAVASCRIPT LOGIKA KASIR --}}
 <script>
-    // Fungsi untuk menyembunyikan / menampilkan kolom Cash
+    // Fungsi untuk menyembunyikan / menampilkan kolom Cash / QRIS
     function togglePembayaranCash() {
         const method = document.getElementById('payment_method').value;
         const sectionCash = document.getElementById('section_cash');
+        const sectionQris = document.getElementById('section_qris');
         const inputUang = document.getElementById('uang_dibayar');
+
+        // Sembunyikan dulu semua section
+        sectionCash.style.display = 'none';
+        sectionQris.style.display = 'none';
+        inputUang.required = false;
 
         if (method === 'CASH') {
             sectionCash.style.display = 'block'; // Tampilkan jika pilih Cash
             inputUang.required = true;           // Wajib diisi kalau Cash
             inputUang.value = '';                // Reset input
             document.getElementById('label_kembalian').innerText = 'Rp 0';
+        } else if (method === 'QRIS') {
+            sectionQris.style.display = 'block'; // Tampilkan barcode QRIS
+            inputUang.value = '{{ $sale->total_pembayaran }}'; // Otomatis set senilai total agar validasi controller lolos
         } else {
-            sectionCash.style.display = 'none';  // Sembunyikan jika pilih QRIS atau kosong
-            inputUang.required = false;          // Tidak wajib diisi
-            inputUang.value = '{{ $sale->total_pembayaran }}'; // Otomatis set senilai total pembayaran agar validasi controller lolos
+            inputUang.value = '{{ $sale->total_pembayaran }}';
         }
     }
 

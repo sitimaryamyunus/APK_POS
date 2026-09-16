@@ -53,8 +53,7 @@ class UserController extends Controller
 
         User::create($data);
 
-        // PERBAIKAN: Mengalihkan ke rute index yang benar setelah tambah data
-        return redirect()->route('admin.users.index')->with('success', 'User berhasil dibuat');
+        return redirect()->route('admin.users.index')->with('success', 'User baru berhasil ditambahkan!');
     }
 
     /**
@@ -91,8 +90,7 @@ class UserController extends Controller
 
         $user->save();
 
-        // PERBAIKAN: Mengubah dari admin.users.edit menjadi admin.users.index agar otomatis kembali ke tabel utama
-        return redirect()->route('admin.users.index')->with('success', 'User updated');
+        return redirect()->route('admin.users.index')->with('success', 'User berhasil diperbarui!');
     }
 
     /**
@@ -102,6 +100,6 @@ class UserController extends Controller
     {
         $user->delete();
 
-        return back()->with('success', 'User deleted');
+        return back()->with('success', 'User berhasil dihapus!');
     }
 }

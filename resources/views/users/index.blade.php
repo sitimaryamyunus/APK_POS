@@ -275,6 +275,12 @@
 <div class="container users-wrap mt-4">
     <div class="users-section">
 
+        @if(session('success'))
+            <div style="background-color: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; padding: 15px 20px; margin-bottom: 20px; border-radius: 8px; font-size: 15px; font-weight: 500;">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <div class="users-header">
             <h1>Halaman Pengguna</h1>
             <a href="{{ route('admin.users.create') }}" class="btn btn-tambah">Tambah Pengguna</a>

@@ -196,9 +196,9 @@
 
     /* Tombol Aksi */
     .btn-detail {
-        background-color: rgba(251, 207, 232, 0.3);
-        border: 1px solid #fbcfe8;
-        color: #be185d;
+        background-color: rgba(243, 232, 255, 0.7);
+        border: 1px solid #e9d5ff;
+        color: #7e22ce;
         font-weight: 600;
         font-size: 0.8rem;
         border-radius: 0.6rem;
@@ -207,8 +207,8 @@
     }
 
     .btn-detail:hover {
-        background-color: #ec4899;
-        border-color: #ec4899;
+        background-color: #a855f7;
+        border-color: #a855f7;
         color: #fff;
     }
 
@@ -244,6 +244,105 @@
         background-color: #e11d48;
         border-color: #e11d48;
         color: #fff;
+    }
+
+    /* Modal Detail (disamakan dengan halaman Produk) */
+    .detail-modal-content {
+        border: none;
+        border-radius: 1.5rem;
+        overflow: hidden;
+    }
+
+    .detail-modal-header {
+        background: linear-gradient(135deg, #fce7f3 0%, #fae8ff 100%);
+        border: none;
+        padding: 1.5rem 1.75rem 1rem;
+    }
+
+    .detail-modal-header h5 {
+        color: #9d174d;
+        font-weight: 800;
+        margin: 0;
+    }
+
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.65rem 0;
+        border-bottom: 1px solid #fbcfe8;
+        font-size: 0.9rem;
+    }
+
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+
+    .detail-label {
+        color: #be185d;
+        font-weight: 700;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+
+    .detail-value {
+        color: #4c0519;
+        font-weight: 600;
+        text-align: right;
+    }
+
+    .detail-items-title {
+        font-weight: 700;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        color: #be185d;
+        margin-bottom: 0.75rem;
+    }
+
+    .detail-items-table {
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 1rem;
+        overflow: hidden;
+        border: 1px solid #fbcfe8;
+    }
+
+    .detail-items-table thead tr {
+        background: rgba(251, 207, 232, 0.55) !important;
+    }
+
+    .detail-items-table thead th {
+        color: #9d174d;
+        font-weight: 700;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        border: none;
+        padding: 0.6rem;
+    }
+
+    .detail-items-table tbody td {
+        color: #4c0519;
+        font-weight: 500;
+        font-size: 0.85rem;
+        border: none;
+        border-top: 1px solid rgba(251, 207, 232, 0.4);
+        padding: 0.6rem;
+    }
+
+    .detail-foto-mini {
+        width: 42px;
+        height: 42px;
+        object-fit: cover;
+        background-color: #fff;
+        border-radius: 0.6rem;
+        border: 2px solid #fbcfe8;
+    }
+
+    .detail-total-row td {
+        border-top: 2px solid #fbcfe8 !important;
+        font-weight: 800;
+        color: #4c0519;
     }
 
     /* Pagination */
@@ -287,6 +386,12 @@
 <div class="container penjualan-wrap py-4">
     <div class="penjualan-section">
 
+            @if(session('success'))
+            <div class="alert alert-success mb-3" style="border-radius: 0.75rem;">
+                {{ session('success') }}
+            </div>
+        @endif
+        
         <div class="penjualan-header">
             <h1>Halaman Penjualan</h1>
             <a href="{{ route('penjualan.create') }}" class="btn btn-buat">Tambah Transaksi Baru</a>
@@ -295,11 +400,6 @@
         @if(session('errors'))
             <div class="alert alert-danger mb-3" style="border-radius: 0.75rem;">
                 {{ session('errors') }}
-            </div>
-        @endif
-        @if(session('success'))
-            <div class="alert alert-success mb-3" style="border-radius: 0.75rem;">
-                {{ session('success') }}
             </div>
         @endif
 
@@ -385,40 +485,41 @@
 </div>
 
 
-<!-- BLOK POPUP MODAL DETAIL ITEMS -->
+{{-- 🔍 MODAL DETAIL PENJUALAN (disamakan dengan style detail Produk) --}}
 @foreach($sales as $sale)
-<div class="modal fade" id="detailModal{{ $sale->id }}" tabindex="-1" aria-labelledby="detailModalLabel{{ $sale->id }}" aria-hidden="true" style="backdrop-filter: blur(4px); text-align: left !important;">
+<div class="modal fade" id="detailModal{{ $sale->id }}" tabindex="-1" aria-labelledby="detailModalLabel{{ $sale->id }}" aria-hidden="true" style="backdrop-filter: blur(4px);">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content border-0 shadow-lg" style="border-radius: 1.5rem;">
-            <div class="modal-header border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
-                <h5 class="modal-title fw-bold" id="detailModalLabel{{ $sale->id }}" style="color: #9d174d;">
-                    <span style="border-left: 5px solid #ec4899; padding-left: 8px;">Rincian Nota Penjualan</span>
-                </h5>
+        <div class="modal-content detail-modal-content shadow-lg">
+            <div class="detail-modal-header d-flex align-items-center justify-content-between">
+                <h5 id="detailModalLabel{{ $sale->id }}">Rincian Nota Penjualan</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body px-4 pb-4">
-                <div class="row g-3 mb-4 p-3 rounded-3" style="background-color: #fdf2f8; border: 1px solid #fbcfe8;">
-                    <div class="col-md-6">
-                        <small class="text-muted d-block fw-bold">TANGGAL NOTA</small>
-                        <span class="fw-semibold text-dark">{{ $sale->created_at->translatedFormat('d F Y H:i:s') }}</span>
-                    </div>
-                    <div class="col-md-6">
-                        <small class="text-muted d-block fw-bold">PETUGAS KASIR</small>
-                        <span class="fw-semibold text-dark">{{ $sale->user->name ?? 'Sistem' }}</span>
-                    </div>
+            <div class="modal-body px-4 py-4 text-start">
+
+                <div class="detail-row">
+                    <span class="detail-label">Tanggal Nota</span>
+                    <span class="detail-value">{{ $sale->created_at->translatedFormat('d F Y H:i:s') }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Petugas Kasir</span>
+                    <span class="detail-value">{{ $sale->user->name ?? 'Sistem' }}</span>
+                </div>
+                <div class="detail-row mb-4">
+                    <span class="detail-label">Metode Pembayaran</span>
+                    <span class="detail-value">{{ $sale->metode_pembayaran }}</span>
                 </div>
 
-                <h6 class="fw-bold mb-2" style="color: #be185d;">Daftar Barang Belanja</h6>
-                <div class="table-responsive rounded-3 border">
+                <div class="detail-items-title">Daftar Barang Belanja</div>
+                <div class="detail-items-table table-responsive">
                     <table class="table table-sm m-0 align-middle text-center">
-                        <thead class="table-light">
+                        <thead>
                             <tr>
-                                <th style="padding: 0.5rem; color: #9d174d; width: 50px;">No</th>
-                                <th style="color: #9d174d; width: 70px;">Foto</th>
-                                <th class="text-start" style="color: #9d174d;">Nama Produk</th>
-                                <th style="color: #9d174d;">Harga Satuan</th>
-                                <th style="color: #9d174d;">Qty</th>
-                                <th class="text-end" style="padding-right: 1rem; color: #9d174d;">Subtotal</th>
+                                <th style="width: 50px;">No</th>
+                                <th style="width: 70px;">Foto</th>
+                                <th class="text-start">Nama Produk</th>
+                                <th>Harga Satuan</th>
+                                <th>Qty</th>
+                                <th class="text-end" style="padding-right: 1rem;">Subtotal</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -428,8 +529,8 @@
                                 <td>
                                     <img
                                         src="{{ asset('storage/' . ($item->produk?->foto)) }}"
-                                        style="width: 50px; height: 50px; object-fit: contain; background-color: #f8f9fa; border-radius: 6px; border: 1px solid #fbcfe8;"
-                                        onerror="this.src='https://placehold.com'">
+                                        class="detail-foto-mini"
+                                        onerror="this.src='https://via.placeholder.com/42?text=%20'">
                                 </td>
                                 <td class="text-start fw-semibold">{{ $item->produk->nama ?? $item->produk->name ?? 'Produk Dihapus' }}</td>
                                 <td>Rp {{ number_format($item->harga_satuan, 0, ',', '.') }}</td>
@@ -441,28 +542,30 @@
                                 <td colspan="6" class="text-center text-muted py-3">Tidak ada rincian item barang.</td>
                             </tr>
                             @endforelse
-                            <tr class="table-light fw-bold" style="border-top: 2px solid #fbcfe8;">
-                                <td colspan="5" class="text-end py-2" style="color: #4c0519;">TOTAL AKHIR :</td>
+                            <tr class="detail-total-row">
+                                <td colspan="5" class="text-end py-2">TOTAL AKHIR :</td>
                                 <td class="text-end py-2" style="font-size: 1.05rem; padding-right: 1rem; color: #be185d;">Rp {{ number_format($sale->total_pembayaran, 0, ',', '.') }}</td>
                             </tr>
-                            
-                            {{-- ===================== TAMBAHAN UANG DIBAYAR & KEMBALIAN ===================== --}}
-                            <tr class="fw-bold" style="border-top: 1px dashed #fbcfe8;">
-                                <td colspan="5" class="text-end py-2" style="color: #4c0519;">UANG DIBAYAR :</td>
-                                <td class="text-end py-2" style="padding-right: 1rem; color: #1e293b;">
+                            @if(strtoupper($sale->metode_pembayaran) === 'CASH')
+                            <tr class="detail-total-row">
+                                <td colspan="5" class="text-end py-2">UANG DIBAYAR :</td>
+                                <td class="text-end py-2" style="padding-right: 1rem;">
                                     Rp {{ number_format($sale->uang_dibayar ?? 0, 0, ',', '.') }}
                                 </td>
                             </tr>
-                            <tr class="fw-bold">
-                                <td colspan="5" class="text-end py-2" style="color: #4c0519;">KEMBALIAN :</td>
+                            <tr class="detail-total-row">
+                                <td colspan="5" class="text-end py-2">KEMBALIAN :</td>
                                 <td class="text-end py-2" style="padding-right: 1rem; color: #16a34a;">
                                     Rp {{ number_format(($sale->uang_dibayar ?? 0) > 0 ? ($sale->uang_dibayar - $sale->total_pembayaran) : 0, 0, ',', '.') }}
                                 </td>
                             </tr>
-                            {{-- ============================================================================== --}}
+                            @endif
                         </tbody>
                     </table>
                 </div>
+            </div>
+            <div class="modal-footer border-0 pb-4 px-4 pt-0">
+                <button type="button" class="btn btn-light border btn-sm" data-bs-dismiss="modal" style="border-radius: 0.75rem; padding: 0.5rem 1.2rem; font-weight: 600;">Tutup</button>
             </div>
         </div>
     </div>

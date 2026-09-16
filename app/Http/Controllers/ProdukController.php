@@ -18,7 +18,6 @@ class ProdukController extends Controller
      */
     public function index(\Illuminate\Http\Request $request)
     {
-        // 🔓 Baris $this->authorize('viewAny') DIHAPUS agar kasir bisa langsung masuk tanpa diblokir 403
 
         $keyword = $request->input('search');
 
