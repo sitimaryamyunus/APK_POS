@@ -257,7 +257,7 @@
             <form action="{{ route('auth') }}" method="POST">
                 @csrf
 
-                <!-- KOLOM EMAIL -->
+                <!-- KOLOM EMAILL -->
                 <div class="mb-3 text-start">
                     <label for="exampleInputEmail1" class="form-label">Email</label>
                     <div class="input-group-custom">
