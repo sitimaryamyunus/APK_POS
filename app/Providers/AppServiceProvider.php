@@ -13,7 +13,7 @@ use App\Models\ItemPenjualan;
 use App\Policies\ItemPenjualanPolicy;
 use App\Policies\PenjualanPolicy;
 use App\Policies\ProdukPolicy;
-
+use Illuminate\Support\Facades\Schema; // <--- 1. KITA TAMBAHKAN INI DI SINI
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -40,5 +40,8 @@ class AppServiceProvider extends ServiceProvider
 
         Paginator::useBootstrapFive();
         Carbon::setLocale('id');
+
+        // <--- 2. KITA TAMBAHKAN BARIS INI UNTUK MENGATASI ERROR KEY LENGTH 767 BYTES
+        Schema::defaultStringLength(191); 
     }
 }

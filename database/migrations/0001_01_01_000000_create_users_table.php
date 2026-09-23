@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->fullText(['name', 'email']);
+            // Baris fullText di bawah ini sudah dimatikan agar tidak eror di database lokal Anda
+            // $table->fullText(['name', 'email']);
             $table->rememberToken();
             $table->timestamps();
         });
